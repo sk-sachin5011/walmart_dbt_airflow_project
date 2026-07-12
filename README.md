@@ -1,137 +1,271 @@
-# 🛒 Walmart Data Engineering Pipeline using Apache Airflow, dbt & PostgreSQL
+# 🛒 Walmart Data Engineering Pipeline using Databricks, Apache Airflow & dbt
 
-![Python](https://img.shields.io/badge/Python-3.11-blue)
-![Apache Airflow](https://img.shields.io/badge/Apache%20Airflow-Orchestration-red)
-![dbt](https://img.shields.io/badge/dbt-Core-orange)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
-![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED)
-
-## 📌 Project Overview
-
-## 📌 Project Overview
-
-This project demonstrates an end-to-end Data Engineering pipeline built using **Apache Airflow**, **dbt**, **PostgreSQL**, and **Docker**. It automates the complete ELT workflow—from loading and validating raw data to transforming it into business-ready analytical models.
-
-Apache Airflow orchestrates the pipeline by executing dbt operations such as seeding, model execution, and data quality testing. dbt applies modular SQL transformations using a layered architecture (Silver Technical, Silver Business, and Gold), while PostgreSQL stores the transformed datasets. The entire solution is containerized using Docker, providing a reproducible and scalable local development environment.
-
-The project follows modern Analytics Engineering practices, emphasizing modularity, automated testing, reusable macros, and maintainable SQL models to deliver reliable, analytics-ready data for downstream reporting and business intelligence.
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
+![Databricks](https://img.shields.io/badge/Databricks-Lakehouse-EF3E42?logo=databricks)
+![Apache Airflow](https://img.shields.io/badge/Apache%20Airflow-Orchestration-017CEE?logo=apache-airflow)
+![dbt](https://img.shields.io/badge/dbt-Core-FF694B?logo=dbt)
+![Delta Lake](https://img.shields.io/badge/Delta%20Lake-Storage-00ADD8)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)
 
 ---
 
-## 🏗️ Architecture
+# 📌 Project Overview
+
+This project demonstrates an end-to-end modern Data Engineering pipeline built using **Databricks**, **Delta Lake**, **Apache Airflow**, **dbt**, and **Docker**. The pipeline automates Change Data Capture (CDC) ingestion, data transformation, orchestration, and dimensional modeling by following modern Lakehouse and Analytics Engineering best practices.
+
+Raw Walmart transactional data is ingested into Databricks through a CDC pipeline and stored as Delta tables using the **Medallion Architecture (Bronze → Silver → Gold)**. dbt then consumes the curated Gold layer to implement the **One Big Table (OBT)** approach before building analytics-ready **Fact** and **Dimension** models. Apache Airflow orchestrates the complete workflow by executing dbt seed, run, and test commands, ensuring a reliable, scalable, and automated ELT pipeline.
+
+---
+
+# 🎯 Project Objective
+
+The primary objective of this project is to build a scalable and production-ready Data Engineering solution that transforms raw Walmart transactional data into trusted analytical datasets.
+
+The project demonstrates the integration of Databricks for CDC ingestion, Delta Lake for scalable storage, dbt for SQL-based transformations and dimensional modeling, and Apache Airflow for workflow orchestration. By leveraging the Medallion Architecture together with the One Big Table (OBT) approach, the pipeline produces optimized Fact and Dimension tables that support reporting, dashboarding, and business analytics while ensuring data quality, maintainability, and scalability.
+
+---
+
+# 🏗️ Solution Architecture
 
 ```text
-                    +-------------------+
-                    |   Source Tables   |
-                    |    PostgreSQL     |
-                    +---------+---------+
-                              |
-                              v
-                    +-------------------+
-                    | Apache Airflow    |
-                    | DAG Orchestration |
-                    +---------+---------+
-                              |
-          +-------------------+-------------------+
-          |                   |                   |
-          v                   v                   v
-     dbt Seed            dbt Run             dbt Test
-                              |
-                              v
-          +-----------------------------------------+
-          |      dbt Transformation Layers          |
-          |-----------------------------------------|
-          | Silver Technical                        |
-          | Silver Business                         |
-          | Gold (Business Ready Models)            |
-          +-------------------+---------------------+
-                              |
-                              v
-                    Analytics / Reporting
+                           Walmart Source Data
+                                    │
+                                    ▼
+                    +-------------------------------+
+                    |         Databricks            |
+                    |     CDC Data Ingestion        |
+                    +---------------+---------------+
+                                    │
+                                    ▼
+                    +-------------------------------+
+                    |      Bronze Delta Tables      |
+                    |        (Raw Data)             |
+                    +---------------+---------------+
+                                    │
+                                    ▼
+                    +-------------------------------+
+                    |      Silver Delta Tables      |
+                    |   Cleansed & Standardized     |
+                    +---------------+---------------+
+                                    │
+                                    ▼
+                    +-------------------------------+
+                    |       Gold Delta Tables       |
+                    |  Business Ready Datasets      |
+                    +---------------+---------------+
+                                    │
+                                    ▼
+                    +-------------------------------+
+                    |              dbt              |
+                    |    OBT → Fact & Dimensions    |
+                    +---------------+---------------+
+                                    │
+               +--------------------+--------------------+
+               |                                         |
+               ▼                                         ▼
+         dbt Tests                               dbt Documentation
+               │
+               ▼
+                    +-------------------------------+
+                    |      Apache Airflow           |
+                    | Pipeline Orchestration        |
+                    +---------------+---------------+
+                                    │
+                                    ▼
+                      Dashboards • Reporting • Analytics
 ```
 
 ---
 
-## ⚙️ Tech Stack
+# 🚀 Technology Stack
 
-- Python 3.11
-- Apache Airflow
-- dbt Core
-- PostgreSQL
-- Docker & Docker Compose
-- SQL
-- Jinja Macros
+| Category | Technologies |
+|-----------|--------------|
+| Programming | Python, SQL |
+| Data Ingestion | Databricks |
+| Storage | Delta Lake |
+| Data Modeling | dbt Core |
+| Workflow Orchestration | Apache Airflow |
+| Containerization | Docker & Docker Compose |
+| Version Control | Git & GitHub |
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
-```
-.
+```text
+walmart_dbt_airflow_project
+│
 ├── airflow/
 │   └── dags/
+│       └── orchestrate.py
+│
 ├── walmart_de/
 │   ├── models/
+│   │   ├── silver_technical/
+│   │   ├── silver_business/
+│   │   ├── gold/
+│   │   └── marts/
+│   │
 │   ├── macros/
 │   ├── seeds/
 │   ├── tests/
+│   ├── snapshots/
 │   └── dbt_project.yml
+│
 ├── docker-compose.yml
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## 🚀 Pipeline Workflow
+# 🔄 Pipeline Workflow
 
-The Airflow DAG orchestrates the complete ELT workflow by executing:
+The pipeline follows a modern ELT architecture consisting of the following stages:
 
-1. Clean previous dbt artifacts
-2. Load seed data
-3. Execute dbt models
-4. Run data quality tests
-5. Generate production-ready analytical tables
+1. **CDC Ingestion**
+   - Databricks ingests Walmart transactional data using Change Data Capture (CDC).
 
-This layered approach separates raw transformations from business logic, making the pipeline scalable, maintainable, and easy to extend.
+2. **Medallion Architecture**
+   - Raw data is stored in Bronze Delta tables.
+   - Cleansing and standardization are performed in Silver.
+   - Business-ready datasets are produced in Gold.
+
+3. **Analytics Engineering**
+   - dbt consumes Gold Delta tables.
+   - Builds an **One Big Table (OBT)**.
+   - Creates analytics-ready Fact and Dimension models.
+
+4. **Pipeline Orchestration**
+   - Apache Airflow orchestrates the complete dbt workflow.
+   - Executes:
+     - dbt Seed
+     - dbt Run
+     - dbt Test
+
+5. **Data Quality**
+   - dbt tests validate data integrity, uniqueness, relationships, and completeness before publishing analytical models.
 
 ---
 
-## ✨ Key Features
+# 📊 Data Modeling Approach
 
-- End-to-end automated ELT pipeline
-- Modular dbt project structure
-- Layered data modeling approach
+The project follows modern Analytics Engineering principles.
+
+### Silver Technical Layer
+- Cleans raw source data
+- Standardizes formats
+- Removes invalid records
+- Applies technical transformations
+
+### Silver Business Layer
+- Implements business rules
+- Calculates derived attributes
+- Creates reusable business entities
+
+### Gold Layer
+- Produces curated business-ready datasets
+- Serves as the input for dimensional modeling
+
+### OBT (One Big Table)
+- Combines curated business entities into a consolidated analytical dataset.
+
+### Fact & Dimension Models
+Using dbt, the OBT is transformed into dimensional models consisting of:
+
+- Fact Tables
+- Dimension Tables
+
+These models are optimized for analytical queries, reporting, and dashboarding.
+
+---
+
+# ✅ Key Features
+
+- End-to-end ELT pipeline
+- CDC-based data ingestion using Databricks
+- Medallion Architecture (Bronze, Silver, Gold)
+- Delta Lake storage
+- Modern Analytics Engineering using dbt
+- One Big Table (OBT) implementation
+- Fact & Dimension data modeling
+- Automated orchestration using Apache Airflow
+- Modular dbt project architecture
+- Reusable dbt macros
 - Automated data quality testing
-- Dockerized local development
-- Reusable Jinja macros
-- Airflow-based orchestration
-- Production-ready project organization
+- Dockerized development environment
+- Production-ready project structure
 
 ---
 
-## ▶️ Getting Started
+# ▶️ Getting Started
+
+### Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/sk-sachin5011/walmart_dbt_airflow_project.git
+
 cd walmart_dbt_airflow_project
+```
 
+### Start the Environment
+
+```bash
 docker compose up -d
+```
 
-# Run Airflow
+### Execute dbt
 
-# Execute dbt
+```bash
 dbt seed
+
 dbt run
+
 dbt test
 ```
 
+### Start Airflow
+
+Open Airflow UI:
+
+```
+http://localhost:8080
+```
+
+Trigger the **orchestrate** DAG to execute the complete pipeline.
+
 ---
 
-## 👨‍💻 Author
+# ✅ Data Quality
+
+The project uses dbt tests to validate:
+
+- Primary Key uniqueness
+- Referential integrity
+- Accepted values
+- Null checks
+- Data consistency
+- Business rule validation
+
+This ensures that only trusted datasets are promoted for analytical consumption.
+
+---
+
+# 📈 Business Value
+
+This project demonstrates how a modern Lakehouse architecture can automate data ingestion, transformation, orchestration, and dimensional modeling using industry-standard Data Engineering tools.
+
+The resulting analytical models provide a reliable foundation for business intelligence, reporting, KPI tracking, and advanced analytics while maintaining scalability, modularity, and data quality.
+
+---
+
+# 👨‍💻 Author
 
 **Sachin Kumar Pal**
 
-Data Engineer | Apache Airflow | dbt | PostgreSQL | Python | SQL
+**Data Engineer**
 
----
-⭐ If you found this project useful, consider giving it a star!
+**Skills:** Databricks • Apache Airflow • dbt • Delta Lake • Python • SQL • Docker • Git
+
+If you found this project helpful, consider giving it a ⭐ on GitHub.
