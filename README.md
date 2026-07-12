@@ -8,9 +8,13 @@
 
 ## 📌 Project Overview
 
-This project demonstrates an end-to-end modern Data Engineering pipeline that automates data transformation using **Apache Airflow**, **dbt**, **PostgreSQL**, and **Docker**. The pipeline follows analytics engineering best practices by orchestrating data validation, transformation, testing, and reporting through a scalable and modular architecture.
+## 📌 Project Overview
 
-Apache Airflow acts as the orchestration engine, executing dbt commands in sequence to build a reliable transformation workflow. dbt manages SQL-based transformations using layered models (Silver Technical, Silver Business, and Gold) while ensuring data quality through built-in tests and reusable macros.
+This project demonstrates an end-to-end Data Engineering pipeline built using **Apache Airflow**, **dbt**, **PostgreSQL**, and **Docker**. It automates the complete ELT workflow—from loading and validating raw data to transforming it into business-ready analytical models.
+
+Apache Airflow orchestrates the pipeline by executing dbt operations such as seeding, model execution, and data quality testing. dbt applies modular SQL transformations using a layered architecture (Silver Technical, Silver Business, and Gold), while PostgreSQL stores the transformed datasets. The entire solution is containerized using Docker, providing a reproducible and scalable local development environment.
+
+The project follows modern Analytics Engineering practices, emphasizing modularity, automated testing, reusable macros, and maintainable SQL models to deliver reliable, analytics-ready data for downstream reporting and business intelligence.
 
 ---
 
