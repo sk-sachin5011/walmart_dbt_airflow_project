@@ -140,7 +140,6 @@ The pipeline follows a modern ELT architecture consisting of the following stage
 4. **Pipeline Orchestration**
    - Apache Airflow orchestrates the complete dbt workflow.
    - Executes:
-     - dbt Seed
      - dbt Run
      - dbt Test
 
