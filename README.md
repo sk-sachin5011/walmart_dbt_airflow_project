@@ -217,7 +217,6 @@ docker compose up -d
 ### Execute dbt
 
 ```bash
-dbt seed
 
 dbt run
 
