@@ -123,17 +123,6 @@ dbt test
 
 ---
 
-## 📈 Future Enhancements
-
-- CI/CD with GitHub Actions
-- Incremental dbt models
-- Great Expectations integration
-- dbt Documentation Hosting
-- Databricks deployment
-- Cloud object storage integration
-
----
-
 ## 👨‍💻 Author
 
 **Sachin Kumar Pal**
